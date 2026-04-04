@@ -1,0 +1,3 @@
+[GET] /hello | Status: 400 | Latency: 0s | IP: ::1
+[GET] /hello | Status: 400 | Latency: 0s | IP: ::1
+[GET] /hello | Status: 200 | Latency: 0s | IP: ::1
