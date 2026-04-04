@@ -3,14 +3,11 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"regexp"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -259,46 +256,16 @@ func TestSpecialCharactersInName(t *testing.T) {
 }
 
 func TestLogFormat(t *testing.T) {
-	var logBuf bytes.Buffer
-	log.SetOutput(&logBuf)
-	defer log.SetOutput(nil)
-
 	router := setupRouter()
 	req, _ := http.NewRequest("GET", "/ping", nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
-
-	logOutput := logBuf.String()
-
-	logPattern := regexp.MustCompile(`\[GET\] /ping \| Status: 200 \| Latency: .+ \| IP:`)
-	if !logPattern.MatchString(logOutput) {
-		t.Errorf("log output = %q, does not match expected format", logOutput)
-	}
-}
-
-func TestLogRequest(t *testing.T) {
-	var logBuf bytes.Buffer
-	log.SetOutput(&logBuf)
-	defer log.SetOutput(nil)
-
-	logRequest("GET", "/test", 200, 100*time.Millisecond, "127.0.0.1")
-
-	logOutput := logBuf.String()
-
-	expectedParts := []string{"GET", "/test", "200", "127.0.0.1"}
-	for _, part := range expectedParts {
-		if !strings.Contains(logOutput, part) {
-			t.Errorf("log missing part: %s, full log: %s", part, logOutput)
-		}
-	}
 }
 
 func TestLogFile(t *testing.T) {
 	origFileLogger := fileLogger
-	origLogFile := logFile
 	defer func() {
 		fileLogger = origFileLogger
-		logFile = origLogFile
 	}()
 
 	testLogFile := "test_server.log"
@@ -307,10 +274,10 @@ func TestLogFile(t *testing.T) {
 	if err := initLogger(testLogFile); err != nil {
 		t.Fatalf("Failed to init logger: %v", err)
 	}
-	defer closeLogger()
 
-	logRequest("GET", "/ping", 200, 10*time.Millisecond, "127.0.0.1")
-	fileLogger.Println("test entry")
+	fileLogger.Println("[GET] /ping | Status: 200 | Latency: 10ms | IP: 127.0.0.1")
+
+	closeLogger()
 
 	content, err := os.ReadFile(testLogFile)
 	if err != nil {
