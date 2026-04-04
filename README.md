@@ -50,6 +50,7 @@ go test -v ./...
 cd fastapi_server\
 pip install -r requirements.txt\
 pytest -v test_main.py
+
 ---
 
 ## Task8. Добавить Swagger-документацию для FastAPI и OpenAPI для Gin.
@@ -74,3 +75,24 @@ go test -v ./...
 cd fastapi_server\
 pip install -r requirements.txt\
 pytest -v test_main.py
+
+---
+
+## Task2. Добавить middleware для логирования в Go.
+
+### Запуск сервера:
+cd task2_mid\
+go run main.go
+
+### Запуск тестов:
+cd gin_server\
+go test -v ./...
+
+
+### Логи выводятся в:
+
+stdout (консоль)\
+server.log (файл)\
+
+#### Формат логов:
+[GET] /hello?name=John | Status: 200 | Latency: 15µs | IP: 127.0.0.1
