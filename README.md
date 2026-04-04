@@ -50,3 +50,27 @@ go test -v ./...
 cd fastapi_server\
 pip install -r requirements.txt\
 pytest -v test_main.py
+---
+
+## Task8. Добавить Swagger-документацию для FastAPI и OpenAPI для Gin.
+
+### Запуск серверов:
+#### FastAPI
+cd task8_mid/fastapi_server\
+py -3 -m pip install -r requirements.txt\
+py main.py
+
+#### Gin (новый терминал)
+cd task8_mid/gin_server\
+go mod download\
+go run main.go
+
+### Запуск тестов:
+#### Go (Gin)
+cd gin_server\
+go test -v ./...
+
+#### Python (FastAPI)
+cd fastapi_server\
+pip install -r requirements.txt\
+pytest -v test_main.py
