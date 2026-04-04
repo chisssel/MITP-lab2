@@ -10,7 +10,8 @@ import (
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Recovery())
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "pong"})
@@ -41,6 +42,10 @@ func main() {
 	r.GET("/slow", func(c *gin.Context) {
 		time.Sleep(50 * time.Millisecond)
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "healthy"})
 	})
 
 	r.Run(":8001")
