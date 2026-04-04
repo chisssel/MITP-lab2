@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 import time
 import uuid
+import asyncio
 
 app = FastAPI()
 
@@ -32,7 +33,7 @@ async def echo(request: Request):
 
 @app.get("/slow")
 async def slow():
-    time.sleep(0.05)
+    await asyncio.sleep(0.05)
     return {"status": "ok"}
 
 
